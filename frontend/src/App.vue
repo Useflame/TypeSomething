@@ -1,17 +1,17 @@
 <template>
-  <TypeSomething />
+  <TypeSomething text="Welcome to Your Vue.js + TypeScript App"/>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import TypeSomething from "./components/TypeSomething.vue";
+import { Options, Vue } from 'vue-class-component';
+import TypeSomething from './components/TypeSomething.vue';
 
-export default defineComponent({
-  name: "App",
+@Options({
   components: {
-    TypeSomething
-  }
-});
+    TypeSomething,
+  },
+})
+export default class App extends Vue {}
 </script>
 
 <style>
