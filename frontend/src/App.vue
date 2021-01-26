@@ -17,6 +17,7 @@ export default {
       text: 'The responses to the pandemic have resulted in global social and economic disruption, including the largest global recession since the Great Depression. It has led to the postponement or cancellation of events, widespread supply shortages exacerbated by panic buying, agricultural disruption and food shortages, and decreased emissions of pollutants and greenhouse gases. Many educational institutions have been partially or fully closed. Misinformation has circulated through social media and mass media. There have been incidents of xenophobia and discrimination against Chinese people and against those perceived as being Chinese or as being from areas with high infection rates.',
       writtenText: 0
     };
+
   }
 }
 </script>

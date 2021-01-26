@@ -17,7 +17,6 @@
         autofocus
         rows="1"
         />
-        <h1>{{writtenText}}</h1>
       </div>
     </div>
   </div>
@@ -41,7 +40,6 @@ export default {
       if(this.typeField == s){
         this.writtenText += this.typeField.length
         this.typeField = "";
-        
       }
     },
     onChange(){
