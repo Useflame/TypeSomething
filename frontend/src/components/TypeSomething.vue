@@ -2,17 +2,25 @@
   <div class="container w-75">
     <div class="row">
       <div class ="col">
-      <p>{{text}}</p>
+      
+        <div class="type-field">
+          <span class="right">{{ text.substring(0, writtenText.length) }}</span>
+          <span class="wrong"></span>
+          <span style="text-decoration: underline">
+          {{ text.substring(writtenText.length).split(' ').slice(0, 1)[0]}}
+          </span>
+          <span v-for="word in text.substring(writtenText.length).split(' ').slice(1)" :key ="word">{{ word + ' ' }}</span>
+        </div>
     </div>
     </div>
     <div class="row">
       <div class="col">
       <input
-        @keyup.space="onSpace"
+
         v-model="typeField"
         autocomplete="off"
         spellcheck="false"
-        @keyup="onChange"
+        @keyup="onSpace"
         class="w-100"
         autofocus
         rows="1"
@@ -26,19 +34,24 @@
 
 
 <script>
+import Vue from 'vue';
+import TextHighlight from 'vue-text-highlight';
+
+Vue.component('text-highlight', TextHighlight);
+
 
 export default {
   name: 'TypeSomething',
   props: {
     text: String,
     typeField: String,
-    writtenText: Number,
+    writtenText: String,
   },
   methods:{ 
     onSpace() {
-      let s = this.text.substring(this.writtenText, this.writtenText + this.typeField.length);
+      let s = this.text.substring(this.writtenText.length, this.writtenText.length + this.typeField.length);
       if(this.typeField == s){
-        this.writtenText += this.typeField.length
+        this.writtenText += this.typeField
         this.typeField = "";
       }
     },
@@ -50,7 +63,7 @@ export default {
 
 
 <style scoped>
-p {
+.type-field {
   text-align: left;
   padding: 0;
   /*Turn off copying text*/
