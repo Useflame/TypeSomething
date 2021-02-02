@@ -32,10 +32,8 @@ export default {
     Header
   },
   data: () => ({
-    return {
       play: false,
       text: 'The responses',
-    };
   })
 }
 </script>
