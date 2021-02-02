@@ -4,22 +4,26 @@
     <div class ="col">
       <div class="type-field">
         <span style="color: green;">{{ greenText }}</span>
-        <span style="text-decoration: underline;"> {{ text.substring(greenText.length).split(' ')[0] }}</span>
-        <span v-for="word in text.substring(greenText.length).split(' ').slice(1)" :key="word">{{ word }}</span>
+        <span style="text-decoration: underline;">
+          {{ text.substring(greenText.length).split(' ')[0] }}
+        </span>
+        <span v-for="word in text.substring(greenText.length).split(' ').slice(1)" :key="word">
+          {{ word }}
+        </span>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col">
       <input
-      @keyup.space="onSpace"
-      v-model="typeField"
-      autocomplete="off"
-      spellcheck="false"
-      @keyup="onChange"
-      class="w-100"
-      :style="bg"
-      rows="1"
+        @keyup.space="onSpace"
+        v-model="typeField"
+        autocomplete="off"
+        spellcheck="false"
+        @keyup="onChange"
+        class="w-100"
+        :style="bg"
+        rows="1"
       />
     </div>
   </div>
@@ -51,24 +55,22 @@ export default {
       if(this.typeField.trim() == s.trim()){
         this.greenText += this.typeField
         this.typeField = "";
-      };
+      }
       if(this.text.trim() == this.greenText.trim()) {
         this.play = false;
-      };
+      }
     },
     onChange(){
       let s = this.text.substring(this.greenText.length, this.greenText.length + this.typeField.length);
       if((this.typeField.trim() != s.trim())){
-        this.bg.backgroundColor = 'red'
-        this.bg.color='black'
+        this.bg.backgroundColor = 'red';
+        this.bg.color='black';
       } else {
-        this.bg.backgroundColor = ''
-        this.bg.color = 'grey'
+        this.bg.backgroundColor = '';
+        this.bg.color = 'grey';
       }
     },
     getTime() {
-      let end = new Date()
-      return this.time - end
     }
   }
   }
@@ -79,6 +81,7 @@ export default {
 .type-field {
   text-align: left;
   padding: 0;
+
   /*Turn off copying text*/
   -webkit-user-select: none;
   -khtml-user-select: none;
