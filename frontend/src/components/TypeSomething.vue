@@ -1,29 +1,29 @@
-<template >
-<div class="container w-75" v-show="play">
+<template>
+<div class="container w-75">
   <div class="row">
     <div class ="col">
       <div class="type-field">
-        <span style="color: green;">{{ greenText }}</span>
-        <span style="text-decoration: underline;">
-          {{ text.substring(greenText.length).split(' ')[0] }}
-        </span>
-        <span v-for="word in text.substring(greenText.length).split(' ').slice(1)" :key="word">
-          {{ word }}
-        </span>
+        <span style="color: green;">{{ typedText }}</span>
+        <span style="text-decoration: underline; color:green;">{{ word.substr(0, greenWord) }}</span>
+        <span style="text-decoration: underline; color: red">{{ word.substr(greenWord, redWord) }}</span>
+        <span style="text-decoration: underline;">{{ word.substr(this.greenWord + this.redWord)}}</span>
+        <span style="color: red;">{{ ' ' + text.substr(0, redWord - word.length)}}</span>
+        <span v-if="word.length > redWord">{{ ' ' + text }}</span>
+        <span v-else>{{ text.substr(redWord - word.length) }}</span>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col">
       <input
-        @keyup.space="onSpace"
-        v-model="typeField"
-        autocomplete="off"
-        spellcheck="false"
-        @keyup="onChange"
-        class="w-100"
-        :style="bg"
-        rows="1"
+      @keyup.space="onSpace"
+      v-model="typingField"
+      autocomplete="off"
+      spellcheck="false"
+      @keyup="onChange"
+      class="w-100"
+      :style="bg"
+      rows="1"
       />
     </div>
   </div>
@@ -38,39 +38,53 @@ export default {
   name: 'TypeSomething',
   props: {
     play: Boolean,
-    text: String,
+    givenText: String,
+  },
+  computed: {
+    text: function() {
+      return this.givenText.split(' ').slice(this.pointer + 1).join(' ')
+    },
+    word: function() {
+      return this.givenText.split(' ')[this.pointer]
+    }
   },
   data: () => ({
-    greenText: '',
-    word: '',
-    timer: '',
+    greenWord: 0,
+    redWord: 0,
+    pointer: 0,
+    typedText: '',
+    typingField: '',
     bg: {
       color: 'grey',
       backgroundColor: ''
-    },
+    }
   }),
-  methods:{ 
+  methods: {
     onSpace() {
-      let s = this.text.substring(this.greenText.length, this.greenText.length + this.typeField.length);
-      if(this.typeField.trim() == s.trim()){
-        this.greenText += this.typeField
-        this.typeField = "";
+      if(this.typingField.trim() === this.word){
+        this.typedText += this.word + ' ';
+        this.pointer++;
+        this.typingField = '';
+        this.greenWord = 0;
       }
-      if(this.text.trim() == this.greenText.trim()) {
-        this.play = false;
+      if(this.typedText.trim() === this.givenText) {
+        this.endGame();
       }
     },
-    onChange(){
-      let s = this.text.substring(this.greenText.length, this.greenText.length + this.typeField.length);
-      if((this.typeField.trim() != s.trim())){
-        this.bg.backgroundColor = 'red';
-        this.bg.color='black';
-      } else {
+    onChange() {
+      if(this.typingField.trim() == this.word.substr(0, this.typingField.length)){
         this.bg.backgroundColor = '';
         this.bg.color = 'grey';
+        this.redWord = 0;
+        this.greenWord = this.typingField.length;
+      } else {
+        this.redWord = this.typingField.length - this.greenWord;
+        this.bg.backgroundColor = 'red';
+        this.bg.color='black';
       }
     },
-    getTime() {
+    endGame() {
+      this.$emit('endGame', false)
     }
   }
   }
@@ -81,7 +95,6 @@ export default {
 .type-field {
   text-align: left;
   padding: 0;
-
   /*Turn off copying text*/
   -webkit-user-select: none;
   -khtml-user-select: none;

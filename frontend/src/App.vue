@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    @keyup.enter="play=true"
+    @keyup.enter="play=play"
   >
     <Header />
     <button
@@ -16,7 +16,9 @@
     Start
     </button>
     <TypeSomething
-      :text="text"
+      :givenText="text"
+      v-on:endGame="end($event)"
+      v-show="play"
       :play="play"
     />
   </div>
@@ -34,8 +36,13 @@ export default {
   },
   data: () => ({
       play: false,
-      text: 'The responses',
-  })
+      text: 'A wiki is a hypertext publication collaboratively edited and managed by its own audience directly using a web browser. A typical wiki contains multiple pages for the subjects or scope of the project and could be either open to the public or limited to use within an organization for maintaining its internal knowledge base.'
+  }),
+  methods: {
+    end(newVal) {
+      this.play = newVal;
+    }
+  }
 }
 </script>
 
