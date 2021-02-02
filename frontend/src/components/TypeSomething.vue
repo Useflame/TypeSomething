@@ -1,35 +1,29 @@
-<template>
-  <div class="container w-75">
-    <div class="row">
-      <div class ="col">
-      
-        <div class="type-field">
-          <span style="color: green;">{{ greenText }}</span>
-          <span style="text-decoration: underline;"> {{ text.substring(greenText.length).split(' ')[0] }}</span>
-          <span v-for="word in text.substring(greenText.length).split(' ').slice(1)"
-          :key="word"
-          >
-        {{ word }}
-      </span>
-        </div>
-    </div>
-    </div>
-    <div class="row">
-      <div class="col">
-      <input
-        @keyup.space="onSpace"
-        @keyup="onChange"
-        v-model="typeField"
-        autocomplete="off"
-        spellcheck="false"
-        class="w-100"
-        autofocus
-        rows="1"
-        :style="bg"
-        />
+<template >
+<div class="container w-75" v-show="play">
+  <div class="row">
+    <div class ="col">
+      <div class="type-field">
+        <span style="color: green;">{{ greenText }}</span>
+        <span style="text-decoration: underline;"> {{ text.substring(greenText.length).split(' ')[0] }}</span>
+        <span v-for="word in text.substring(greenText.length).split(' ').slice(1)" :key="word">{{ word }}</span>
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col">
+      <input
+      @keyup.space="onSpace"
+      v-model="typeField"
+      autocomplete="off"
+      spellcheck="false"
+      @keyup="onChange"
+      class="w-100"
+      :style="bg"
+      rows="1"
+      />
+    </div>
+  </div>
+</div>
 </template>
 
 
@@ -39,20 +33,28 @@
 export default {
   name: 'TypeSomething',
   props: {
+    play: Boolean,
     text: String,
-    typeField: String,
-    greenText: String,
-    bg: Object,
   },
+  data: () => ({
+    greenText: '',
+    word: '',
+    timer: '',
+    bg: {
+      color: 'grey',
+      backgroundColor: ''
+    },
+  }),
   methods:{ 
     onSpace() {
       let s = this.text.substring(this.greenText.length, this.greenText.length + this.typeField.length);
-      if((this.typeField.trim() == s.trim())){
+      if(this.typeField.trim() == s.trim()){
         this.greenText += this.typeField
         this.typeField = "";
-      } else if(this.text == this.greenText) {
-        alert('1234')
-      }
+      };
+      if(this.text.trim() == this.greenText.trim()) {
+        this.play = false;
+      };
     },
     onChange(){
       let s = this.text.substring(this.greenText.length, this.greenText.length + this.typeField.length);
@@ -64,8 +66,12 @@ export default {
         this.bg.color = 'grey'
       }
     },
+    getTime() {
+      let end = new Date()
+      return this.time - end
+    }
   }
-}
+  }
 </script>
 
 
@@ -80,6 +86,7 @@ export default {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  margin-top: 60px;
 }
 </style>
 
