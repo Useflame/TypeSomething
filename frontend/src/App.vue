@@ -1,26 +1,40 @@
 <template>
-  <div
-    id="app"
-    @keyup.enter="play=play"
-  >
+  <div id="app" >
     <Header />
+    <span  /> 
     <button
-      class="btn btn-light vertical-center"
-      @keyup.enter="play=true"
-      @click="play=true"
-      ref="type-field"
-      v-show="!play"
+      class="btn btn-dark vertical-center row"
+      v-hotkey="keymap"
+      v-show="playStatus === 'start'"
+      @click="startf"
       type="button"
-      autofocus
     >
     Start
     </button>
+    <div v-show="playStatus=='end'" class="row">
+      <div class="col">
+        <p>Your time: {{ result.time }}</p>
+        <p>Your wpm: {{ result.wpm }}</p> 
+      </div>
+      <button
+        class="btn btn-dark vertical-center col"
+        v-hotkey="keymap"
+        @click="startf"
+        type="button"
+      >
+      Play again
+      </button>
+    </div>
+
+
     <TypeSomething
-      :givenText="text"
+      v-show="playStatus === 'playing'"
       v-on:endGame="end($event)"
-      v-show="play"
-      :play="play"
+      ref="input"
+      :play="playStatus"
+      :givenText="text"
     />
+
   </div>
 </template>
 
@@ -34,14 +48,34 @@ export default {
     TypeSomething,
     Header
   },
+  computed: {
+    keymap () {
+      return {
+        'enter': this.startf
+      }
+    }
+  },
   data: () => ({
-      play: false,
-      text: 'A wiki is a hypertext publication collaboratively edited and managed by its own audience directly using a web browser. A typical wiki contains multiple pages for the subjects or scope of the project and could be either open to the public or limited to use within an organization for maintaining its internal knowledge base.'
+      playStatus: 'start',
+      text: 'A wiki.',
+      start: undefined,
+      endv: undefined,
+      result: {
+        time: 0,
+        wpm: 0
+      }
   }),
   methods: {
     end(newVal) {
-      this.play = newVal;
-    }
+      this.playStatus = newVal;
+      this.endv = new Date().getTime();
+      this.result.time = Math.round((this.endv - this.start) / 1000);
+      this.result.wpm = Math.round(Math.round(this.text.length / 5) / this.result.time * 60);
+    },
+    startf() {
+      this.start = new Date().getTime();
+      this.playStatus = 'playing';
+    },
   }
 }
 </script>

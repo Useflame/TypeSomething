@@ -3,12 +3,14 @@
   <div class="row">
     <div class ="col">
       <div class="type-field">
-        <span style="color: green;">{{ typedText }}</span>
-        <span style="text-decoration: underline; color:green;">{{ word.substr(0, greenWord) }}</span>
-        <span style="text-decoration: underline; color: red">{{ word.substr(greenWord, redWord) }}</span>
-        <span style="text-decoration: underline;">{{ word.substr(this.greenWord + this.redWord)}}</span>
-        <span style="color: red;">{{ ' ' + text.substr(0, redWord - word.length)}}</span>
-        <span v-if="word.length > redWord">{{ ' ' + text }}</span>
+        <span class="right">{{ typedText }}</span>
+        <span class="word right">{{ word.substr(0, greenWord) }}</span>
+        <span class="word wrong">{{ word.substr(greenWord, redWord) }}</span>
+        <span class="word">{{ word.substr(this.greenWord + this.redWord)}}</span>
+        <span class="wrong">{{ ' ' + text.substr(0, redWord - word.length)}}</span>
+        <span
+          v-if="word.length > redWord"
+          >{{ ' ' + text }}</span>
         <span v-else>{{ text.substr(redWord - word.length) }}</span>
       </div>
     </div>
@@ -20,6 +22,7 @@
       v-model="typingField"
       autocomplete="off"
       spellcheck="false"
+      ref="typingField"
       @keyup="onChange"
       class="w-100"
       :style="bg"
@@ -37,7 +40,7 @@
 export default {
   name: 'TypeSomething',
   props: {
-    play: Boolean,
+    play: String,
     givenText: String,
   },
   computed: {
@@ -61,18 +64,19 @@ export default {
   }),
   methods: {
     onSpace() {
-      if(this.typingField.trim() === this.word){
+      if (this.typingField.trim() === this.word) {
         this.typedText += this.word + ' ';
         this.pointer++;
         this.typingField = '';
         this.greenWord = 0;
       }
-      if(this.typedText.trim() === this.givenText) {
+      if (this.typedText.trim() === this.givenText) {
+        this.typingField = '';
         this.endGame();
       }
     },
     onChange() {
-      if(this.typingField.trim() == this.word.substr(0, this.typingField.length)){
+      if (this.typingField.trim() === this.word.substr(0, this.typingField.length)) {
         this.bg.backgroundColor = '';
         this.bg.color = 'grey';
         this.redWord = 0;
@@ -84,7 +88,7 @@ export default {
       }
     },
     endGame() {
-      this.$emit('endGame', false)
+      this.$emit('endGame', 'end')
     }
   }
   }
@@ -92,7 +96,17 @@ export default {
 
 
 <style scoped>
+.right {
+  color: green;
+}
+.wrong {
+  color: red;
+}
+.word {
+  text-decoration: underline;
+}
 .type-field {
+  font-size: 1.1em;
   text-align: left;
   padding: 0;
   /*Turn off copying text*/
