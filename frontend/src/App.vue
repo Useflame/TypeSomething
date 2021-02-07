@@ -1,6 +1,6 @@
 <template>
   <div id="app" >
-    <Header />
+    <Navbar />
     <span  /> 
     <button
       class="btn btn-dark vertical-center row"
@@ -40,13 +40,13 @@
 
 <script>
 import TypeSomething from '@/components/TypeSomething'
-import Header from '@/components/Header'
+import Navbar from '@/components/Navbar'
 
 export default {
   name: 'App',
   components: {
     TypeSomething,
-    Header
+    Navbar
   },
   computed: {
     keymap () {
@@ -57,7 +57,7 @@ export default {
   },
   data: () => ({
       playStatus: 'start',
-      text: 'A wiki.',
+      text: 'A wikiasldkjhf;lksdj a;lfkjdsa;lkfj ;lkdsjf ;lkadjs;lkdfjs .',
       start: undefined,
       endv: undefined,
       result: {

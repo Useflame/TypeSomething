@@ -1,4 +1,4 @@
-<template class="header">
+<template>
   <nav class="navbar navbar-light bg-light ">
     <a class="navbar-brand" href="/">TypeSomething</a>
   </nav>
@@ -6,8 +6,9 @@
 
 <script>
 export default {
-  name: 'Header',
+  name: 'Navbar',
   props: {},
+  data: () => ({}),
   methods:{}
 }
 </script>
