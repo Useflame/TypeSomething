@@ -1,83 +1,58 @@
 <template>
-  <div id="app" >
+  <div id="app">
     <Navbar />
-    <span  /> 
-    <button
-      class="btn btn-dark vertical-center row"
-      v-hotkey="keymap"
-      v-show="playStatus === 'start'"
-      @click="startf"
-      type="button"
-    >
-    Start
-    </button>
-    <div v-show="playStatus=='end'" class="row">
-      <div class="col">
-        <p>Your time: {{ result.time }}</p>
-        <p>Your wpm: {{ result.wpm }}</p> 
-      </div>
-      <button
-        class="btn btn-dark vertical-center col"
-        v-hotkey="keymap"
-        @click="startf"
-        type="button"
-      >
-      Play again
-      </button>
-    </div>
-
-
+    <Start v-show="playStatus === 'start'" :start="start($event)" />
     <TypeSomething
       v-show="playStatus === 'playing'"
-      v-on:endGame="end($event)"
+      :end="end($event)"
       ref="input"
       :play="playStatus"
       :givenText="text"
     />
-
+    <Result v-show="playStatus === 'result'" />
   </div>
 </template>
 
 <script>
-import TypeSomething from '@/components/TypeSomething'
-import Navbar from '@/components/Navbar'
+import TypeSomething from "@/components/TypeSomething";
+import Navbar from "@/components/Navbar";
+import Result from "@/components/Result";
+import Start from "@/components/Start";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     TypeSomething,
-    Navbar
-  },
-  computed: {
-    keymap () {
-      return {
-        'enter': this.startf
-      }
-    }
+    Result,
+    Start,
+    Navbar,
   },
   data: () => ({
-      playStatus: 'start',
-      text: 'A wikiasldkjhf;lksdj a;lfkjdsa;lkfj ;lkdsjf ;lkadjs;lkdfjs .',
-      start: undefined,
-      endv: undefined,
-      result: {
-        time: 0,
-        wpm: 0
-      }
+    playStatus: "start",
+    text:
+      "Text messaging, or texting, is the act of composing and sending electronic messages, typically consisting of alphabetic and numeric characters, between two or more users of mobile devices, desktops/laptops, or other type of compatible computer. Text messages may be sent over a cellular network, or may also be sent via an Internet connection.",
+    startTime: undefined,
+    endTime: undefined,
+    result: {
+      time: 0,
+      wpm: 0,
+    },
   }),
   methods: {
     end(newVal) {
       this.playStatus = newVal;
       this.endv = new Date().getTime();
-      this.result.time = Math.round((this.endv - this.start) / 1000);
-      this.result.wpm = Math.round(Math.round(this.text.length / 5) / this.result.time * 60);
+      this.result.time = Math.round((this.endTime - this.startTime) / 1000);
+      this.result.wpm = Math.round(
+        (Math.round(this.text.length / 5) / this.result.time) * 60
+      );
     },
-    startf() {
+    start(newVal) {
       this.start = new Date().getTime();
-      this.playStatus = 'playing';
+      this.endTime = newVal;
     },
-  }
-}
+  },
+};
 </script>
 
 <style>

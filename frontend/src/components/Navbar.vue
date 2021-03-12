@@ -6,15 +6,11 @@
 
 <script>
 export default {
-  name: 'Navbar',
+  name: "Navbar",
   props: {},
   data: () => ({}),
-  methods:{}
-}
+  methods: {},
+};
 </script>
 
-
-<style scoped>
-
-</style>
-
+<style scoped></style>
